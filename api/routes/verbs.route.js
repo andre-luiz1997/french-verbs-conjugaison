@@ -20,9 +20,14 @@ router.get('/:name', (req, res, next) => {
     if(name!== undefined){
         VerbController.find(name)
         .then(response => {
-            return res.status(200).json({
-                message: 'Verb fetched successfully',
-                data: response
+            if(response) {
+                return res.status(200).json({
+                    message: 'Verb fetched successfully',
+                    data: response
+                });
+            }
+            return res.status(400).json({
+                message: 'Verb not found'
             });
         })
         .catch(err => {
@@ -98,7 +103,6 @@ router.get('/startsWith/:vowel', (req, res, next) => {
 
 async function createVerbs(res){
     for (letter of alphabet) {
-        const letter = 'a';
         const verbes = JSON.parse(fs.readFileSync(`./data/verbes/${letter}.json`));
         for (el of verbes) {
             if(el.value !== undefined){
